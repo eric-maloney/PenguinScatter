@@ -1,12 +1,25 @@
 <html>
 <head>
- <script src="classData.json"></script> 
+<link rel="stylesheet" type="text/css" href="class.css">
+<script src="classData.json"></script> 
 </head>
 <body>
   <div id="spread">
   <h2>Final vs Mean Grade HW Plot</h2>
   <svg width="550" height="300" id="graph">
   </svg>
+    <button type="button" id="FvHW">
+        Final Vs HW Mean
+    </button>
+    <button type="button" id="HWvQ">
+    HW  Mean Vs Quiz Mean
+    </button>
+    <button type="button" id="TvF">
+     Test Mean Vs Final Mean
+    </button>
+    <button type="button" id="TvQ">
+     Test Mean Vs Quiz Mean 
+    </button>
   </div>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
