@@ -1,7 +1,13 @@
 var studentPromise= d3.json("classData.json");
-studentPromise.then (function(penguins){
-    console.log(penguins);
+studentPromise.then (function(penguins)
+    {
+    console.log(penguins); 
     displaySpread(penguins);
+    displayHWvQuiz(penguins);
+    displayTestvFinal(penguins);
+    displayTestvQuiz(penguins);
+    clearGraph();
+    initialize(penguins);
     
 },function(err)
 {
@@ -29,6 +35,8 @@ var meanHomework = function(penguin)
     return d3.mean (getHomework(penguin));
 }
 
+
+
 var getQuizzes = function(penguin)
 {
     return penguin.quizes.map(getQuizgrade);
@@ -41,6 +49,9 @@ var meanQuiz = function(penguin)
 {
     return d3.mean (getQuizzes(penguin));
 }
+
+
+
 
 var getTests = function(penguin)
 {
@@ -56,10 +67,12 @@ var meanTest = function(penguin)
 }
 
 
+
 var getFinal = function(penguin)
 {
     return penguin.final[0].grade
 };
+
 
 
 
@@ -87,11 +100,10 @@ var displaySpread = function(penguins)
                           d3.min(penguins,meanHomework)-10,
                           d3.max(penguins,meanHomework)+10
                         ])
-                .range([300,0]);
+                .range([300,0]); 
+
     
-    
-                        
-    svg.selectAll("circle")
+        svg.selectAll("circle")
         .data(penguins)
         .enter()
         .append("circle")
@@ -106,72 +118,197 @@ var displaySpread = function(penguins)
         
         .attr("r",3)
         .attr("fill","blue") 
-    
-    
 }
 
-var clearGraph = function()
+
+var displayHWvQuiz = function(penguins)
 {
-    d3.selectAll("svg circle")
-        .remove();
-};
+    var width = 550;
+    var height= 300;
+    
 
-
-  var buttons= function(penguins)
-  {
-     d3.select("#FvHW")
-      .on("clicked", function()
-          {console.log("clicked")
-           
-           
-           
-        .selectAll("circle")
+    var svg = d3.select("#spread svg")
+            .attr("width",width)
+            .attr("height",height)
+            .attr("id","graph")
+    
+    console.log("Pengins", penguins);
+    var xScale = d3.scaleLinear()
+                .domain([
+                    d3.min(penguins,meanHomework)-10,
+                    d3.max(penguins,meanHomework)+10
+                ])
+                .range([0,550])
+    
+    var yScale = d3.scaleLinear()
+                .domain([
+                          d3.min(penguins,meanQuiz)-10,
+                          d3.max(penguins,meanQuiz)+10
+                        ])
+                .range([300,0]);
+    
+    
+    svg.selectAll("circle")
         .data(penguins)
         .enter()
         .append("circle")
         .attr("cx",function(penguin)
         {
-            return xScale(meanQuiz(penguin));    
+            return xScale(meanHomework(penguin));    
         })
         .attr("cy",function(penguin)
         {
-            return yScale(meanHomework(penguin));  
+            return yScale(meanQuiz(penguin));  
         })
         
         .attr("r",3)
-        .attr("fill","blue") 
-           
-           
-           
-           
+        .attr("fill","red") 
+}
+    
+
+    var displayTestvFinal = function(penguins)
+{
+    var width = 550;
+    var height= 300;
+    
+
+    var svg = d3.select("#spread svg")
+            .attr("width",width)
+            .attr("height",height)
+            .attr("id","graph")
+    
+    
+    var xScale = d3.scaleLinear()
+                .domain([
+                    d3.min(penguins,meanTest)-10,
+                    d3.max(penguins,meanTest)+10
+                ])
+                .range([0,550])
+    
+    var yScale = d3.scaleLinear()
+                .domain([
+                          d3.min(penguins,getFinal)-10,
+                          d3.max(penguins,getFinal)+10
+                        ])
+                .range([300,0]);
+    
+      svg.selectAll("circle")
+        .data(penguins)
+        .enter()
+        .append("circle")
+        .attr("cx",function(penguin)
+        {
+            return xScale(meanTest(penguin));    
+        })
+        .attr("cy",function(penguin)
+        {
+            return yScale(getFinal(penguin));  
+        })
+        
+        .attr("r",3)
+        .attr("fill","green") 
+    
+}
+    
+
+    var displayTestvQuiz = function(penguins)
+{
+    var width = 550;
+    var height= 300;
+    
+
+    var svg = d3.select("#spread svg")
+            .attr("width",width)
+            .attr("height",height)
+            .attr("id","graph")
+    
+    
+    var xScale = d3.scaleLinear()
+                .domain([
+                    d3.min(penguins,meanTest)-10,
+                    d3.max(penguins,meanTest)+10
+                ])
+                .range([0,550])
+    
+    var yScale = d3.scaleLinear()
+                .domain([
+                          d3.min(penguins,meanQuiz)-10,
+                          d3.max(penguins,meanQuiz)+10
+                        ])
+                .range([300,0]);
+ 
+    svg.selectAll("circle")
+        .data(penguins)
+        .enter()
+        .append("circle")
+        .attr("cx",function(penguin)
+        {
+            return xScale(meanTest(penguin));    
+        })
+        .attr("cy",function(penguin)
+        {
+            return yScale(meanQuiz(penguin));  
+        })
+        
+        .attr("r",3)
+        .attr("fill","blueviolet") 
+}
+
+
+
+var clearGraph = function()
+{
+    var svg = d3.select("svg")
+    .selectAll("circle") 
+    .remove()
+     console.log(svg)
+
+    }
+
+var initialize= function(penguins)
+{
+    
+    d3.select("#HWvQ")
+    .on("click", function()
+        {
         clearGraph()
-        displaySpread(penguins)
-        console.log("spread was drawn")
-        console.log(penguins)
-          });
-      
+        displayHWvQuiz(penguins);
+        })
+    console.log("hello")
+    
+    
+   d3.select("#FvHW")
+    .on("click", function()
+        {
+        clearGraph()
+        displaySpread(penguins);
+        })
+    console.log("hello")
+     
+    
+    d3.select("#TvF")
+    .on("click", function()
+        {
+        clearGraph()
+        displayTestvFinal(penguins);
+        })
+    console.log("hello")
+    
+    
+    d3.select("#TvQ")
+    .on("click", function()
+        {
+        clearGraph()
+        displayTestvQuiz(penguins);
+        })
+    console.log("hello")
+    
+    
+};
+
+  
+        
+  
+     
  
   
-     d3.select("#HWvQ")
-      .on("clicked", function()
-          {console.log("clicked");
-        
-          });
-      
-  
-
-     d3.select("#TvF")
-      .on("clicked", function()
-          {console.log("clicked");
-        
-          });
-      
-  
-
-     d3.select("#TvQ")
-      .on("clicked", function()
-          {console.log("clicked");
-        
-          });
-      
-  };
