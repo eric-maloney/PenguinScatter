@@ -118,6 +118,8 @@ var displaySpread = function(penguins)
         
         .attr("r",3)
         .attr("fill","blue") 
+    .on("mouseover", mouseover)
+    .on("mouseleave", mouseleave)
 }
 
 
@@ -252,8 +254,8 @@ var displayHWvQuiz = function(penguins)
         
         .attr("r",3)
         .attr("fill","blueviolet") 
-}
-
+         
+         }
 
 
 var clearGraph = function()
@@ -273,6 +275,7 @@ var initialize= function(penguins)
         {
         clearGraph()
         displayHWvQuiz(penguins);
+        document.getElementById("head1").innerHTML="Mean Homework Grades vs Mean Quiz Grades"
         })
     console.log("hello")
     
@@ -282,6 +285,7 @@ var initialize= function(penguins)
         {
         clearGraph()
         displaySpread(penguins);
+       document.getElementById("head1").innerHTML="Final Grade Vs Mean Homework Grade"
         })
     console.log("hello")
      
@@ -291,6 +295,7 @@ var initialize= function(penguins)
         {
         clearGraph()
         displayTestvFinal(penguins);
+        document.getElementById("head1").innerHTML="Mean Test Grades vs Final Grade"
         })
     console.log("hello")
     
@@ -300,15 +305,32 @@ var initialize= function(penguins)
         {
         clearGraph()
         displayTestvQuiz(penguins);
+        document.getElementById("head1").innerHTML="Mean Test Grades vs Mean Quiz Grades"
         })
     console.log("hello")
     
     
 };
 
-  
-        
-  
-     
- 
-  
+var tooltip = d3.select("#spread svg")
+.append("img")
+.style("opacity", 0)
+.attr("class","tooltip")
+
+var mouseover = function(penguin)
+{
+    tooltip
+    .style("opacity",0)
+    .append("img")
+    .attr("src",function(penguin)
+      {
+    return "imgs/" + penguin.picture;
+});
+}
+
+var mouseleave= function(penguin)
+{
+ tooltip
+ .style("opacity",0)
+    
+}
